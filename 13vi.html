@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mourning Gathering Invitation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #eaeaea;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #555;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .date {
+            font-weight: bold;
+            color: #6c757d;
+        }
+        .countdown {
+            font-size: 24px;
+            font-weight: bold;
+            color: #dc3545;
+        }
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #5a6268;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none; /* Initially hidden */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        input[type="text"], input[type="email"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+        .names-list {
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>In Loving Memory</h1>
+    <img src="https://media-del2-2.cdn.whatsapp.net/v/t61.24694-24/461326641_1184422799281913_5111348892241972755_n.jpg?ccb=11-4&oh=01_Q5AaIOKrrdu_G2fmkTg321E82d2B-63RY5gsacsNycEUGWpz&oe=671B6B2F&_nc_sid=5e03e0&_nc_cat=108" alt="Memorial Image" style="max-width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;">
+    <p>We invite you to join us in mourning the loss of our beloved Nishchay Aggarwal.</p>
+    <p class="date">Date: September 17, 2025</p>
+    <p>Location: Aryabhatta Hostel</p>
+    <p>Time: 9:30 AM</p>
+    <div class="countdown" id="countdown"></div>
+    <div class="button" onclick="openRSVPModal()">RSVP</div>
+    <div class="button" onclick="openNamesModal()">View Registered Names</div>
+</div>
+
+<!-- Modal for RSVP -->
+<div id="rsvpModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeRSVPModal()">&times;</span>
+        <h3>RSVP</h3>
+        <input type="text" placeholder="Your Name" id="name" required>
+        <input type="email" placeholder="Your Email" id="email" required>
+        <input type="submit" value="Submit" onclick="submitRSVP()">
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div id="confirmationModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeConfirmationModal()">&times;</span>
+        <h3>Thank You!</h3>
+        <p id="confirmationMessage"></p>
+    </div>
+</div>
+
+<!-- Names Modal -->
+<div id="namesModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeNamesModal()">&times;</span>
+        <h3>Registered Names</h3>
+        <div class="names-list" id="namesList"></div>
+    </div>
+</div>
+
+<script>
+    const registeredNames = []; // Array to store registered names
+
+    // Set the date for the gathering
+    const eventDate = new Date('2024-10-28T12:00:00').getTime(); // Adjust the time as needed
+
+    const countdownFunction = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = eventDate - now;
+
+        // Calculate time components
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Update the countdown display
+        document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+        // If the countdown is finished
+        if (distance < 0) {
+            clearInterval(countdownFunction);
+            document.getElementById("countdown").innerHTML = "Gathering Started";
+        }
+    }, 1000);
+
+    // Open RSVP Modal
+    function openRSVPModal() {
+        document.getElementById("rsvpModal").style.display = "block";
+    }
+
+    // Close RSVP Modal
+    function closeRSVPModal() {
+        document.getElementById("rsvpModal").style.display = "none";
+    }
+
+    // Close Confirmation Modal
+    function closeConfirmationModal() {
+        document.getElementById("confirmationModal").style.display = "none";
+    }
+
+    // Open Names Modal
+    function openNamesModal() {
+        document.getElementById("namesList").innerHTML = registeredNames.map(name => `<p>${name}</p>`).join('');
+        document.getElementById("namesModal").style.display = "block";
+    }
+
+    // Close Names Modal
+    function closeNamesModal() {
+        document.getElementById("namesModal").style.display = "none";
+    }
+
+    // Submit RSVP
+    function submitRSVP() {
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+
+        if (name && email) {
+            registeredNames.push(name); // Add the name to the array
+            document.getElementById("confirmationMessage").innerText = `Thank you for your RSVP, ${name}. We appreciate your support.`;
+            closeRSVPModal();
+            document.getElementById("confirmationModal").style.display = "block";
+            document.getElementById("name").value = '';
+            document.getElementById("email").value = '';
+        } else {
+            alert("Please fill in all fields.");
+        }
+    }
+
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        const rsvpModal = document.getElementById("rsvpModal");
+        const confirmationModal = document.getElementById("confirmationModal");
+        const namesModal = document.getElementById("namesModal");
+        if (event.target == rsvpModal) {
+            closeRSVPModal();
+        }
+        if (event.target == confirmationModal) {
+            closeConfirmationModal();
+        }
+        if (event.target == namesModal) {
+            closeNamesModal();
+        }
+    }
+</script>
+
+</body>
+</html>
